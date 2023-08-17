@@ -4,10 +4,44 @@
   export const pageSchema = {
   type: "document",
   name: "page",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "seo", title: "SEO" },
+  ],
   fields: [
     {
+      name: "seoTitle",
+      title: "Title (Open Graph)",
+      type: "string",
+      group: "seo",
+      description:
+        "Used for Open Graph previews implemented  by facebook, twitter, google etc.",
+    },
+    {
+      name: "seoDescription",
+      title: "Description (Open Graph)",
+      type: "string",
+      group: "seo",
+    },
+    {
+      name: "seoKeywords",
+      type: "array",
+      group: "seo",
+      options: { layout: "tags" },
+      of: [{ name: "keyword", type: "string" }],
+    },
+    {
+      name: "seoShareImage",
+      title: "Image (Open Graph)",
+      group: "seo",
+      description: "1200x630px recommended",
+      type: "image",
+      options: { hotspot: true },
+    },
+    {
       type: "object",
-      name: "mainSections",
+      name: "mainSection",
+      group: "content",
       fields: [
         { name: "pageTitle", type: "string" },
         {
@@ -72,6 +106,8 @@
           ],
         },
       ],
+      group: "content",
     },
   ],
+  preview: { select: { title: "mainSection.pageTitle" } },
 };

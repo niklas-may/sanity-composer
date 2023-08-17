@@ -8,8 +8,9 @@ export const galleryFactory = new Builder()
     of: [mediaFactory],
   })
   .setQuery(
-    (slots) => `
-    gallery[] { 
+    (slots) => /* groq */`
+    gallery[] {
+      _key, 
       caption,
       ${slots("gallery")}
     }`

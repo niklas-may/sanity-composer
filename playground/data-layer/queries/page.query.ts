@@ -4,6 +4,50 @@
   export const pageQuery = /* groq */ `
  *[_id == "home"] {
   mainSection {
-    pageTitle
-  }
+    pageTitle,
+
+    gallery[] {
+      _key, caption, type,
+
+      type == "image" => {
+        image {
+          "title": asset->title,
+          "altText": asset->altText,
+          "src": asset->url,
+
+          "metaData": {
+            crop, hotspot,
+
+            "width": asset->metadata.dimensions.width,
+            "height": asset->metadata.dimensions.height
+          }
+        }
+      },
+
+      type == "video" => {
+        player.asset-> {
+          playbackId,
+
+          "ratio": data.aspect_ratio,
+
+          thumbTime
+        },
+
+        mood.asset-> {
+          playbackId,
+
+          "ratio": data.aspect_ratio
+        }
+      }
+    }
+  },
+
+  callToActions {
+    title, url
+  },
+
+  "seoTitle": coalesce(seoTitle[$lang], seoTitle.en),
+  "seoDescription": coalesce(seoDescription[$lang], seoDescription.en),
+
+  seoKeywords
 }`;

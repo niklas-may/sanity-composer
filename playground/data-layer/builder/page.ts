@@ -1,25 +1,38 @@
-import { Builder } from "../../../src/lib/builder";
-import { callToActionsFactory } from "./call-to-action";
-import { galleryFactory } from "./gallery";
+import {abstractWebPage} from './abstract-web-page'
+import {Builder} from '../../../src/lib/builder'
+import {callToActionsFactory} from './call-to-action'
+import {galleryFactory} from './gallery'
 
 export const document = new Builder()
+  .mixin(abstractWebPage)
   .setSchema({
-    type: "document",
-    name: "page",
+    type: 'document',
+    name: 'page',
     fields: [
       {
-        type: "object",
-        name: "mainSections",
+        type: 'object',
+        name: 'mainSection',
+        group: 'content',
         fields: [
           {
-            name: "pageTitle",
-            type: "string",
+            name: 'pageTitle',
+            type: 'string',
           },
           galleryFactory,
         ],
       },
-      callToActionsFactory,
+      callToActionsFactory.setGroup('content'),
     ],
+    preview: {
+      select: {
+        title: 'mainSection.pageTitle',
+      },
+      prepare(args) {
+        return {
+          title: args.title,
+        }
+      },
+    },
   })
   .setQuery(
     (slots) => /* groq */ `
@@ -27,10 +40,11 @@ export const document = new Builder()
       *[_id == 'home'] {
         mainSection {
           pageTitle,
-          ${slots("mainSection")}
+          ${slots('mainSection')}
         },
-        ${slots("home")}
+        ${slots('page')}
+        ${slots('mixin')}
       }
 
     `
-  );
+  )

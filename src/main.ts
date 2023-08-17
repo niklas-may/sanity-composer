@@ -75,6 +75,7 @@ chokidar.watch(config.builderIn).on("all", async (event, path, stats) => {
   }
 
   if (event === "change") {
+
     const updateList = [];
 
     files.forEach((file) => {
@@ -91,9 +92,12 @@ chokidar.watch(config.builderIn).on("all", async (event, path, stats) => {
       }
     });
 
-    files.forEach((filePath) => {
-      delete require.cache[filePath as string];
-      processFile(filePath as string);
+    delete require.cache[filePath as string];
+    processFile(filePath as string);
+
+    updateList.forEach((fp) => {
+      delete require.cache[fp as string];
+      processFile(fp as string);
     });
   }
 });
