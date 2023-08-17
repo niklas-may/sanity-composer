@@ -1,0 +1,5 @@
+{
+  "builderIn": "playground/builder/**/*.ts",
+  "schmeaOut": "playground/schema/",
+  "queryOut": "playground/query/"
+}
