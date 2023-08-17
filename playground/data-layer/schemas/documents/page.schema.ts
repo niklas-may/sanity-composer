@@ -55,7 +55,6 @@
                 },
               },
             },
-            { type: "caption", name: "caption" },
           ],
         },
       ],

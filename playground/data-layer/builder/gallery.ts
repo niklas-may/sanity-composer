@@ -1,11 +1,11 @@
 import { mediaFactory } from "./media";
-import { Builder } from "../../src/lib/builder";
+import { Builder } from "../../../src/lib/builder";
 
 export const galleryFactory = new Builder()
   .setSchema({
     type: "array",
     name: "gallery",
-    of: [mediaFactory, { type: "caption", name: "caption" }],
+    of: [mediaFactory],
   })
   .setQuery(
     (slots) => `

@@ -19,6 +19,7 @@
     "typescript": "^5.1.6"
   },
   "scripts": {
+    "dev:playground": "cd playground && yarn dev",
     "dev": "nodemon src/main.ts --ignore ./codegen --ignore ./playground/"
   }
 }

@@ -1,8 +1,6 @@
-import { Builder } from "../../src/lib/builder";
+import { Builder } from "../../../src/lib/builder";
 import { callToActionsFactory } from "./call-to-action";
 import { galleryFactory } from "./gallery";
-
-
 
 export const document = new Builder()
   .setSchema({

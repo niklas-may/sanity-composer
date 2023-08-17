@@ -1,4 +1,4 @@
-import { Builder } from "../../src/lib/builder";
+import { Builder } from "../../../src/lib/builder";
 
 export const mediaFactory = new Builder()
   .setSchema({
