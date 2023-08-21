@@ -1,25 +1,23 @@
 {
-  "name": "sanity-monolyth",
+  "name": "sanity-data-composer",
   "version": "1.0.0",
   "main": "main.js",
   "license": "MIT",
   "dependencies": {
     "dependency-tree": "^10.0.9",
     "nodemon": "^3.0.1",
-    "sanity": "^3.15.1"
+    "sanity": "^3.15.1",
+    "serialize-javascript": "^6.0.1"
   },
   "devDependencies": {
-    "barrelsby": "^2.8.0",
-    "change-case": "^4.1.2",
     "chokidar": "^3.5.3",
-    "create-index": "^2.6.0",
+    "groqfmt-nodejs": "^0.0.1",
     "prettier": "^3.0.2",
-    "prettier-plugin-groq": "^0.2.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   },
   "scripts": {
     "dev:playground": "cd playground && yarn dev",
-    "dev": "nodemon src/main.ts --ignore ./codegen --ignore ./playground/"
+    "dev": "nodemon src/main.ts --ignore ./playground/"
   }
 }

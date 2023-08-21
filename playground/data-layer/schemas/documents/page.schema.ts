@@ -49,45 +49,88 @@
           name: "gallery",
           of: [
             {
-              name: "media",
+              name: "slide",
               type: "object",
               fields: [
                 {
-                  name: "type",
-                  title: "Type",
-                  type: "string",
-                  options: {
-                    list: ["image", "video"],
-                    layout: "radio",
-                    direction: "horizontal",
+                  name: "media",
+                  type: "object",
+                  fields: [
+                    {
+                      name: "type",
+                      title: "Type",
+                      type: "string",
+                      options: {
+                        list: ["image", "video"],
+                        layout: "radio",
+                        direction: "horizontal",
+                      },
+                      initialValue: "image",
+                      validation: (Rule) => Rule.required(),
+                    },
+                    {
+                      name: "mood",
+                      title: "Mood Video",
+                      description:
+                        "Automatic playback without audio. Videos should be max. 10 seconds long.",
+                      type: "file",
+                      hidden: ({ parent }) =>
+                        (parent === null || parent === void 0
+                          ? void 0
+                          : parent.type) !== "video",
+                    },
+                    {
+                      name: "player",
+                      title: "Video Player",
+                      description:
+                        "Video Player with all playback controls. If combined with a mood video, the mood video will replace the image poster.",
+                      type: "file",
+                      hidden: ({ parent }) =>
+                        (parent === null || parent === void 0
+                          ? void 0
+                          : parent.type) !== "video",
+                    },
+                    {
+                      name: "image",
+                      type: "image",
+                      options: { hotspot: true },
+                      hidden: ({ parent }) =>
+                        (parent === null || parent === void 0
+                          ? void 0
+                          : parent.type) !== "image",
+                    },
+                  ],
+                  preview: {
+                    select: {
+                      type: "type",
+                      mood: "mood.asset.playbackId",
+                      player: "player.asset.playbackId",
+                      image: "image",
+                    },
+                    prepare: function (args) {
+                      if (args.type === "video") {
+                        const thumbnail = `https://image.mux.com/${
+                          args.mood || args.player
+                        }/thumbnail.jpg`;
+                        return {
+                          title: [
+                            args.mood && "Mood Video",
+                            args.player && "Video Player",
+                          ]
+                            .filter(Boolean)
+                            .join(" and "),
+                        };
+                      } else {
+                        return {
+                          title: "Image",
+                          media: args.image,
+                        };
+                      }
+                    },
                   },
-                  hidden: true,
-                  initialValue: "image",
                 },
-                {
-                  name: "mood",
-                  title: "Mood Video",
-                  description:
-                    "Automatic playback without audio. Videos should be max. 10 seconds long.",
-                  type: "file",
-                },
-                {
-                  name: "player",
-                  title: "Video Player",
-                  description:
-                    "Video Player with all playback controls. If combined with a mood video, the mood video will replace the image poster.",
-                  type: "file",
-                },
-                { name: "image", type: "image", options: { hotspot: true } },
+                { name: "caption", type: "string" },
               ],
-              preview: {
-                select: {
-                  type: "type",
-                  mood: "mood.asset.playbackId",
-                  player: "player.asset.playbackId",
-                  image: "image",
-                },
-              },
             },
           ],
         },
@@ -109,5 +152,12 @@
       group: "content",
     },
   ],
-  preview: { select: { title: "mainSection.pageTitle" } },
+  preview: {
+    select: { title: "mainSection.pageTitle" },
+    prepare: function (args) {
+      return {
+        title: args.title,
+      };
+    },
+  },
 };

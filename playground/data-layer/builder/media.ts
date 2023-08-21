@@ -14,7 +14,6 @@ export const mediaFactory = new Builder()
           layout: "radio",
           direction: "horizontal",
         },
-        hidden: true,
         initialValue: "image",
         validation: (Rule) => Rule.required(),
       },
@@ -66,30 +65,30 @@ export const mediaFactory = new Builder()
   })
   .setQuery(
     () => /* groq */ ` 
-    type,
-    type == "image" => {
-      image {
-        "title": asset->title,
-        "altText": asset->altText,
-        "src": asset->url,
-        "metaData": {
-          "crop": crop,
-          "hotspot": hotspot,
-          "width": asset->metadata.dimensions.width,
-          "height": asset->metadata.dimensions.height,
+    media {
+      _type,
+      type,
+      type == 'image' => {
+        'image': image.asset->{
+        url,
+        'lqip': metadata.lqip,
+        'ratio': metadata.dimensions.aspectRatio
+      },
+      crop,
+      hotspot
+      },
+      type == 'video' => {
+        'player': player.asset->{
+          'playbackId': playbackId,
+          'ratio': data.aspect_ratio,
+          thumbTime
+      
+        },
+        'mood': mood.asset->{
+        'playbackId': playbackId,
+        'ratio': data.aspect_ratio
         }
-      },
-    },
-    type == "video" => {
-      "player": player.asset->{
-        "playbackId": playbackId,
-        "ratio": data.aspect_ratio,
-        thumbTime
-        
-      },
-      "mood": mood.asset->{
-      "playbackId": playbackId,
-      "ratio": data.aspect_ratio
       }
-    }`
+    }
+    `
   );

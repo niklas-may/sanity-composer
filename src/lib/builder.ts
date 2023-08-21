@@ -86,10 +86,6 @@ export class Builder {
     });
   }
 
-  getSchemaString() {
-    return JSON.stringify(this.getSchema());
-  }
-
   getQuery() {
     const slotContent = { mixin: this.mixinQuery };
     this.#walk(this.schema, ({ builder, parent }) => {

@@ -3,6 +3,7 @@ import chokidar from "chokidar";
 import p, { basename, dirname } from "path";
 import { readFileSync, readdirSync } from "fs";
 import { Builder } from "./lib/builder";
+import serialize from "serialize-javascript";
 
 import dependencyTree from "dependency-tree";
 
@@ -14,7 +15,7 @@ async function handleBuilderChange(document: Builder, path: string) {
 
   prettyWriteTsFile(
     p.resolve(document.schemaType === "document" ? config.documentSchemaOut : config.objectSchemaOut, schameFileName),
-    `export const ${schemaName} = ${document.getSchemaString()}`
+    `export const ${schemaName} = ${serialize(document.getSchema())}`
   );
 
   const queryFileName = `${name}.query.ts`;
@@ -22,7 +23,7 @@ async function handleBuilderChange(document: Builder, path: string) {
 
   prettyWriteTsFile(
     p.resolve(config.queryOut, queryFileName),
-    `export const ${queryName}= /* groq */\`\n ${await prettifiyGroq(document.getQuery())}\``
+    `export const ${queryName}= /* groq */\`\n ${await prettifiyGroq(document.getQuery())}\n\``
   );
 }
 
@@ -75,7 +76,6 @@ chokidar.watch(config.builderIn).on("all", async (event, path, stats) => {
   }
 
   if (event === "change") {
-
     const updateList = [];
 
     files.forEach((file) => {

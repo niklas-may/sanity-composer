@@ -37,13 +37,13 @@ export const document = new Builder()
   .setQuery(
     (slots) => /* groq */ `
 
-      *[_id == 'home'] {
+      *[_type == 'page'] {
         mainSection {
           pageTitle,
           ${slots('mainSection')}
         },
-        ${slots('page')}
         ${slots('mixin')}
+        ${slots('page')}
       }
 
     `

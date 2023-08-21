@@ -55,9 +55,9 @@ export const abstractWebPage = new Builder()
     },
   })
   .setQuery(
-    (slots) => /* groq */ `
-      "seoTitle": coalesce(seoTitle[$lang], seoTitle.en),
-      "seoDescription": coalesce(seoDescription[$lang], seoDescription.en),
+    () => /* groq */ `
+      'seoTitle': coalesce(seoTitle[$lang], seoTitle.en),
+      'seoDescription': coalesce(seoDescription[$lang], seoDescription.en),
        seoKeywords
     `
   )
