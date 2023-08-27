@@ -1,14 +1,14 @@
-import { EventHandlerDependencies, EventHandler } from "./library/event-handler";
 import path from "path";
 import { readdirSync, statSync } from "fs";
 import { register } from "ts-node";
 import chokidar from "chokidar";
-import { FileWriter, FileContainer, Logger, EventBus } from "./library";
+import { FileWriter, FileContainer, Logger, EventBus, EventHandlerDependencies, EventHandler } from "./library";
 import { QueryWriter } from "./query-writer";
 
 export interface FrameworkOptions {
   builderIn: string;
   queryOut: string;
+  listener?: Array<ListenerFactory>;
 }
 
 export interface SanityComposerFrameworkEvents {
@@ -18,7 +18,9 @@ export interface SanityComposerFrameworkEvents {
   ready: [];
 }
 
-export class Framework {
+export type ListenerFactory = (ctx: EventHandlerDependencies<SanityComposerFrameworkEvents>) => any;
+
+export class SanityComposer {
   options: FrameworkOptions;
   watcher: chokidar.FSWatcher;
   files: FileContainer;
@@ -34,11 +36,13 @@ export class Framework {
       queryOut: this.#normalizePath(userOptions.queryOut),
     };
 
-
     this.files = new FileContainer(this.options.builderIn);
     this.#loadAllFiles();
 
-    this.#setupListener([(ctx) => new QueryWriter(ctx)]);
+    const listenerTemp: Array<ListenerFactory> = [(ctx) => new QueryWriter(ctx)];
+    if (userOptions.listener) userOptions.listener.forEach((l) => listenerTemp.push(l));
+
+    this.#setupListener(listenerTemp);
 
     this.watcher = watcher;
     watcher.on("all", (event, path) => {
@@ -59,7 +63,7 @@ export class Framework {
       transpileOnly: true,
     });
 
-    this.eventBus.emit('ready')
+    this.eventBus.emit("ready");
   }
 
   #normalizePath(relativePath: string) {
@@ -95,11 +99,11 @@ export class Framework {
     });
   }
 
-  #setupListener(handler?: Array<(ctx: EventHandlerDependencies<SanityComposerFrameworkEvents>) => any>) {
+  #setupListener(handler?: Array<ListenerFactory>) {
     /* Allway run these first */
     this.eventBus.on("add", (filePath) => this.files.add(filePath));
     this.eventBus.on("change", (filePath) => this.files.get(filePath)?.setDirty());
-    
+
     /* Allway run these in the middle */
     if (handler) {
       handler.forEach((handler) =>

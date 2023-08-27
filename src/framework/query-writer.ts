@@ -2,7 +2,7 @@ import path from "path";
 import { unlinkSync } from "fs";
 import { FileNode } from "./library/file-container";
 import { EventHandler, EventHandlerDependencies, Logger } from "./library";
-import { SanityComposerFrameworkEvents } from "./main";
+import { SanityComposerFrameworkEvents } from "./core-framework";
 
 export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
   logger: Logger;

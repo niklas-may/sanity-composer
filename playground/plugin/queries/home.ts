@@ -3,43 +3,37 @@
  */
 
 export default /* groq */`
-*[_type == "page"] {
+*[_type == "home"] {
+  _type,
   mainSection {
-    pageTitle,
-    gallery[] {
-      caption,
-      _key,
-      media {
-        type,
-        type == "image" => {
-          "image": image.asset-> {
-            url,
-            "lqip": metadata.lqip,
-            "ratio": metadata.dimensions.aspectRatio
-          },
-          hotspot,
-          crop
+    pageTitle
+  },
+  gallery[] {
+    caption,
+    _key,
+    media {
+      type,
+      type == "image" => {
+        "image": image.asset-> {
+          url,
+          "lqip": metadata.lqip,
+          "ratio": metadata.dimensions.aspectRatio
         },
-        type == "video" => {
-          "player": player.asset-> {
-            "playbackId": playbackId,
-            "ratio": data.aspect_ratio,
-            thumbTime
-          },
-          "mood": mood.asset-> {
-            "playbackId": playbackId,
-            "ratio": data.aspect_ratio
-          }
+        hotspot,
+        crop
+      },
+      type == "video" => {
+        "player": player.asset-> {
+          "playbackId": playbackId,
+          "ratio": data.aspect_ratio,
+          thumbTime
+        },
+        "mood": mood.asset-> {
+          "playbackId": playbackId,
+          "ratio": data.aspect_ratio
         }
       }
     }
-  },
-  "seoTitle": coalesce(seoTitle[], seoTitle.en),
-  "seoDescription": coalesce(seoDescription[], seoDescription.en),
-  seoKeywords,
-  callToActions {
-    url,
-    title
   }
 }
 `

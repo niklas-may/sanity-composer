@@ -1,5 +1,5 @@
 import { type Plugin } from "vite";
-import { Framework } from "./main";
+import { SanityComposer } from "./core-framework";
 
 export interface Options {
   builderIn: string;
@@ -10,9 +10,9 @@ export interface Options {
 export default function VitePluginSanityDatacomposer(options: Options): Plugin {
   return {
     apply: "serve",
-    name: "sanity-datacomposer",
+    name: "sanity-composer",
     configureServer(server) {
-      new Framework(options, server.watcher);
+      new SanityComposer(options, server.watcher);
     },
   } as const satisfies Plugin;
 }
