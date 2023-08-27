@@ -1,9 +1,10 @@
 import { Builder } from "src/library/builder";
 import callToActionsFactory from "./call-to-action";
 import galleryFactory from "./gallery";
-
+import abstractWebPage from "./abstract-web-page";
 
 export default new Builder()
+  .mixin(abstractWebPage)
   .setSchema({
     name: "page",
     type: "document",

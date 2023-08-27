@@ -7,8 +7,8 @@ export default new Builder()
     type: 'object',
     fields: [
       {
-        title: 'Type',
         type: 'string',
+        title: 'Type',
         name: 'type',
         options: {
           list: ['image', 'video'],

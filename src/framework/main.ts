@@ -77,7 +77,7 @@ export class Framework {
         }
       });
 
-      return filePaths;
+      return filePaths.filter(p => p.includes('.ts'));
     }
 
     const paths = getAllFilePaths(this.options.builderIn);
@@ -96,7 +96,7 @@ export class Framework {
   }
 
   emit(type: Event, filePath: string) {
-    if (filePath ? !filePath.includes(this.options.builderIn) : false) return;
+    if (filePath ? !filePath.includes(this.options.builderIn) && filePath.includes('.ts') : false) return;
 
     this.logger.log(`${type} ${filePath}`);
 
@@ -111,7 +111,6 @@ export class Framework {
           if (l.onChange) l.onChange(filePath);
           break;
         case "unlink":
-          this.files.remove(filePath);
           if (l.onUnlink) l.onUnlink(filePath);
           break;
         case "ready":
@@ -119,5 +118,9 @@ export class Framework {
           break;
       }
     });
+
+    if (type === "unlink") {
+      this.files.remove(filePath);
+    }
   }
 }

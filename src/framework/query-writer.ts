@@ -1,5 +1,6 @@
-import { FileNode } from "./library/file-container";
 import path from "path";
+import { unlinkSync } from "fs";
+import { FileNode } from "./library/file-container";
 import { EventHandler, EventHandlerInterface, EventHandlerDependencies, Logger } from "./library";
 
 export class QueryWriter extends EventHandler implements EventHandlerInterface {
@@ -54,6 +55,9 @@ export class QueryWriter extends EventHandler implements EventHandlerInterface {
         const queryOnDisk = this.fileWriter.checkFileExists(queryFilePath) && require(queryFilePath)?.default;
 
         if (queryOnDisk) {
+          /**
+           * TODO: Functionality is flaky... neds some investigation
+           */
           const isEqual = query.trim().replace(/\s/g, "") === queryOnDisk.trim().replace(/\s/g, "");
 
           if (!isEqual) {
@@ -66,5 +70,13 @@ export class QueryWriter extends EventHandler implements EventHandlerInterface {
         }
       }
     });
+  }
+
+  onUnlink(filePath: string) {
+    const queryFilePath = this.getQueryFilePath(this.files.get(filePath)!);
+
+    try {
+      unlinkSync(queryFilePath);
+    } catch (e: any) {}
   }
 }
