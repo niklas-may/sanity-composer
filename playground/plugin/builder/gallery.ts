@@ -1,14 +1,14 @@
-import {mediaFactory} from './media'
-import {Builder} from '../../../src/lib/builder'
+import mediaFactory from './media'
+import { Builder } from "src/library/builder";
 
-export const galleryFactory = new Builder()
+export default new Builder()
   .setSchema({
     type: 'array',
     name: 'gallery',
     of: [
       {
-        name: 'slide',
         type: 'object',
+        name: 'slide',
         fields: [mediaFactory, {name: 'caption', type: 'string'}],
       },
     ],
@@ -16,8 +16,8 @@ export const galleryFactory = new Builder()
   .setQuery(
     (slots) => /* groq */ `
     gallery[] {
-      _key,
       caption,
+      _key,
       ${slots('slide')}
     }`
   )

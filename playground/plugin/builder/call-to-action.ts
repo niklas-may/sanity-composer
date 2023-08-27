@@ -1,13 +1,13 @@
-import { Builder } from "../../../src/lib/builder";
+import { Builder } from "src/library/builder";
 
-export const callToActionsFactory = new Builder()
+export default new Builder()
   .setSchema({
     type: "array",
     name: "callToAction",
     of: [
       {
-        name: "link",
         type: "object",
+        name: "link",
         fields: [
           {
             name: "title",
@@ -24,8 +24,8 @@ export const callToActionsFactory = new Builder()
   .setQuery(
     () => /* groq */ `
     callToActions {
+        url,
         title,
-        url
     }
 `
   );
