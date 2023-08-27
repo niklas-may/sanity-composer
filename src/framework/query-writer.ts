@@ -1,18 +1,19 @@
 import path from "path";
 import { unlinkSync } from "fs";
 import { FileNode } from "./library/file-container";
-import { EventHandler, EventHandlerInterface, EventHandlerDependencies, Logger } from "./library";
+import { EventHandler, EventHandlerDependencies, Logger } from "./library";
+import { SanityComposerFrameworkEvents } from "./main";
 
-export class QueryWriter extends EventHandler implements EventHandlerInterface {
+export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
   logger: Logger;
 
-  constructor(dI: EventHandlerDependencies) {
+  constructor(dI: EventHandlerDependencies<SanityComposerFrameworkEvents>) {
     super(dI);
     this.logger = new Logger("Query Writer");
-  }
 
-  log(...args: any[]) {
-    this.logger.log(...args);
+    this.eventBus.on("change", async (filePath) => await this.onChange(filePath));
+    this.eventBus.on("unlink", (filePath) => this.onUnlink(filePath));
+    this.eventBus.on("ready", async () => await this.onReady());
   }
 
   async getPrettyQuery(file: FileNode) {
@@ -61,11 +62,11 @@ export class QueryWriter extends EventHandler implements EventHandlerInterface {
           const isEqual = query.trim().replace(/\s/g, "") === queryOnDisk.trim().replace(/\s/g, "");
 
           if (!isEqual) {
-            this.log(`On Ready: Query of ${file.basename} changed. Writing updated version to disk.`);
+            this.logger.log(`On Ready: Query of ${file.basename} changed. Writing updated version to disk.`);
             this.writeQuery(queryFilePath, query);
           }
         } else {
-          this.log(`On Ready: Writing query for ${file.basename}.`);
+          this.logger.log(`On Ready: Writing query for ${file.basename}.`);
           this.writeQuery(queryFilePath, query);
         }
       }

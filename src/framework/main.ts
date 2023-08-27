@@ -1,8 +1,9 @@
+import { EventHandlerDependencies, EventHandler } from "./library/event-handler";
 import path from "path";
 import { readdirSync, statSync } from "fs";
 import { register } from "ts-node";
 import chokidar from "chokidar";
-import { FileWriter, FileContainer, EventHandlerInterface, Logger } from "./library";
+import { FileWriter, FileContainer, Logger, EventBus } from "./library";
 import { QueryWriter } from "./query-writer";
 
 export interface FrameworkOptions {
@@ -10,17 +11,22 @@ export interface FrameworkOptions {
   queryOut: string;
 }
 
-type SupportedChokidarEvent = "add" | "change" | "unlink";
-type Event = "ready" | SupportedChokidarEvent;
+export interface SanityComposerFrameworkEvents {
+  add: [filePath: string];
+  change: [filePath: string];
+  unlink: [filePath: string];
+  ready: [];
+}
 
 export class Framework {
   options: FrameworkOptions;
   watcher: chokidar.FSWatcher;
   files: FileContainer;
-  listener: Array<EventHandlerInterface> = [];
+  listener: Array<EventHandler<SanityComposerFrameworkEvents>> = [];
   writer = new FileWriter();
   tsService: ReturnType<typeof register>;
-  logger = new Logger().setLogLevel("warn");
+  logger = new Logger();
+  eventBus = new EventBus<SanityComposerFrameworkEvents>();
 
   constructor(userOptions: FrameworkOptions, watcher: chokidar.FSWatcher) {
     this.options = {
@@ -28,9 +34,11 @@ export class Framework {
       queryOut: this.#normalizePath(userOptions.queryOut),
     };
 
+
     this.files = new FileContainer(this.options.builderIn);
-    this.addListener(new QueryWriter({ writer: this.writer, files: this.files, options: this.options }));
     this.#loadAllFiles();
+
+    this.#setupListener([(ctx) => new QueryWriter(ctx)]);
 
     this.watcher = watcher;
     watcher.on("all", (event, path) => {
@@ -38,7 +46,7 @@ export class Framework {
         case "add":
         case "change":
         case "unlink":
-          this.emit(event, path);
+          this.eventBus.emit(event, path);
       }
     });
 
@@ -51,7 +59,7 @@ export class Framework {
       transpileOnly: true,
     });
 
-    this.emit("ready", "");
+    this.eventBus.emit('ready')
   }
 
   #normalizePath(relativePath: string) {
@@ -77,7 +85,7 @@ export class Framework {
         }
       });
 
-      return filePaths.filter(p => p.includes('.ts'));
+      return filePaths.filter((p) => p.includes(".ts"));
     }
 
     const paths = getAllFilePaths(this.options.builderIn);
@@ -87,40 +95,21 @@ export class Framework {
     });
   }
 
-  addListener(listener: EventHandlerInterface | Array<EventHandlerInterface>) {
-    if (Array.isArray(listener)) {
-      listener.forEach((l) => this.listener.push(l));
-    } else {
-      this.listener.push(listener);
+  #setupListener(handler?: Array<(ctx: EventHandlerDependencies<SanityComposerFrameworkEvents>) => any>) {
+    /* Allway run these first */
+    this.eventBus.on("add", (filePath) => this.files.add(filePath));
+    this.eventBus.on("change", (filePath) => this.files.get(filePath)?.setDirty());
+    
+    /* Allway run these in the middle */
+    if (handler) {
+      handler.forEach((handler) =>
+        this.listener.push(
+          handler({ files: this.files, options: this.options, writer: this.writer, eventBus: this.eventBus })
+        )
+      );
     }
-  }
 
-  emit(type: Event, filePath: string) {
-    if (filePath ? !filePath.includes(this.options.builderIn) && filePath.includes('.ts') : false) return;
-
-    this.logger.log(`${type} ${filePath}`);
-
-    this.listener.forEach((l) => {
-      switch (type) {
-        case "add":
-          this.files.add(filePath);
-          if (l.onAdd) return l.onAdd(filePath);
-          break;
-        case "change":
-          this.files.get(filePath)?.setDirt();
-          if (l.onChange) l.onChange(filePath);
-          break;
-        case "unlink":
-          if (l.onUnlink) l.onUnlink(filePath);
-          break;
-        case "ready":
-          if (l.onReady) l.onReady();
-          break;
-      }
-    });
-
-    if (type === "unlink") {
-      this.files.remove(filePath);
-    }
+    /* Allway run these last*/
+    this.eventBus.on("unlink", (filePath) => this.files.remove(filePath));
   }
 }

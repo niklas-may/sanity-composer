@@ -34,6 +34,9 @@ export default /* groq */`
       }
     }
   },
+  "seoTitle": coalesce(seoTitle[], seoTitle.en),
+  "seoDescription": coalesce(seoDescription[], seoDescription.en),
+  seoKeywords,
   callToActions {
     url,
     title

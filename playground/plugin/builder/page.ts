@@ -6,12 +6,12 @@ import abstractWebPage from "./abstract-web-page";
 export default new Builder()
   .mixin(abstractWebPage)
   .setSchema({
-    name: "page",
     type: "document",
+    name: "page",
     fields: [
       {
-        name: "mainSection",
         group: "content",
+        name: "mainSection",
         type: "object",
         fields: [
           {

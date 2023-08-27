@@ -44,7 +44,7 @@ export class FileNode {
     return this.#programData;
   }
 
-  setDirt() {
+  setDirty() {
     this.dirty = true;
   }
 
