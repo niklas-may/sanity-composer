@@ -10,7 +10,7 @@ export default new Builder()
       {
         name: 'slide',
         type: 'object',
-        fields: [mediaFactory,  {name: 'caption', type: 'string'}],
+        fields: [mediaFactory, callToAction, {name: 'caption', type: 'string'}],
       },
     ],
   })

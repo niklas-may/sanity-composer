@@ -25,8 +25,10 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
   }
 
   writeQuery(filePath: string, query: string) {
+    if (!query) return;
     const code = `export default /* groq */\`\n${query}\``;
     this.fileWriter.writeTypeScript(filePath, code);
+    this.logger.log(`Exported query Grr ${path.basename(filePath)}`);
   }
 
   async onChange(filePath: string) {
@@ -36,15 +38,16 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
       const query = await this.getPrettyQuery(file);
 
       this.writeQuery(this.getQueryFilePath(file), query);
+      this.logger.log(`Exported query ${file.basename}`);
+      return;
+    } else {
+      file?.walkUp(async (pFile) => {
+        if (pFile.type === "document" ) {
+          const query = await this.getPrettyQuery(pFile);
+          this.writeQuery(this.getQueryFilePath(pFile), query);
+        }
+      });
     }
-
-    file?.walkUp(async (pFile) => {
-      if (pFile.type === "document") {
-        const query = await this.getPrettyQuery(pFile);
-
-        this.writeQuery(this.getQueryFilePath(pFile), query);
-      }
-    });
   }
 
   async onReady() {
@@ -74,7 +77,7 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
   }
 
   onUnlink(filePath: string) {
-    this.logger.log('unlink', filePath)
+    this.logger.log("unlink", filePath);
     const queryFilePath = this.getQueryFilePath(this.files.get(filePath)!);
 
     try {

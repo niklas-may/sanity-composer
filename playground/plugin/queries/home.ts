@@ -33,6 +33,10 @@ export default /* groq */`
           "ratio": data.aspect_ratio
         }
       }
+    },
+    callToActions[] {
+      url,
+      title
     }
   }
 }

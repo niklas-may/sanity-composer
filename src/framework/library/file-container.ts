@@ -14,7 +14,7 @@ export class FileNode {
 
   dirty = true;
 
-  #programData: {default: Builder} | undefined;
+  #programData: { default: Builder } | undefined;
 
   constructor(filePath: string, files: Files) {
     this.filePath = filePath;
@@ -25,12 +25,12 @@ export class FileNode {
     return path.basename(this.filePath);
   }
 
-  get type(){
-   return this.program?.default?.schemaType
+  get type() {
+    return this.program?.default?.schemaType;
   }
 
-  get name(){
-    return this.program?.default.name
+  get name() {
+    return this.program?.default.name;
   }
 
   get program() {
@@ -48,10 +48,14 @@ export class FileNode {
     this.dirty = true;
   }
 
-  walkUp(callback: (parent: FileNode) => void) {
+  walkUp(callback: (parent: FileNode) => void, visitedBefore?: Array<string>) {
+    const visited = visitedBefore ? visitedBefore : [...this.parents.values()];
+    
     this.parents.forEach((p) => {
-      callback(this.#files.get(p)!);
-      this.#files.get(p)?.walkUp(callback);
+      if (!visitedBefore?.includes(p)) {
+        callback(this.#files.get(p)!);
+      }
+      this.#files.get(p)?.walkUp(callback, visited);
     });
   }
 }

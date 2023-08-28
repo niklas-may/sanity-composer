@@ -31,13 +31,17 @@ export default /* groq */`
             "ratio": data.aspect_ratio
           }
         }
+      },
+      callToActions[] {
+        url,
+        title
       }
     }
   },
   "seoTitle": coalesce(seoTitle[], seoTitle.en),
   "seoDescription": coalesce(seoDescription[], seoDescription.en),
   seoKeywords,
-  callToActions {
+  callToActions[] {
     url,
     title
   }

@@ -30,4 +30,8 @@ export class Logger {
     if (this.level > 0) return;
     console.log(this.prefix, ...args);
   }
+  error(...args: any[]) {
+    const title = args.shift()
+    console.error(this.prefix, chalk.bgRed(title), ...args);
+  }
 }
