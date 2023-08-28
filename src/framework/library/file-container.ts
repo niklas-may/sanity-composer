@@ -115,6 +115,6 @@ export class FileContainer {
       this.get(cFP)?.parents.delete(fP);
     });
 
-    this.files.delete(fP);
+    return this.files.delete(fP);
   }
 }

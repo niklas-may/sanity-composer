@@ -50,7 +50,9 @@ export class SanityComposer {
         case "add":
         case "change":
         case "unlink":
-          this.eventBus.emit(event, path);
+          if (path.includes(this.options.builderIn) && path.includes(".ts")) {
+            this.eventBus.emit(event, path);
+          }
       }
     });
 

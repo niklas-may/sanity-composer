@@ -74,6 +74,7 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
   }
 
   onUnlink(filePath: string) {
+    this.logger.log('unlink', filePath)
     const queryFilePath = this.getQueryFilePath(this.files.get(filePath)!);
 
     try {
