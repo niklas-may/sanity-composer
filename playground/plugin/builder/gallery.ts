@@ -1,3 +1,4 @@
+import callToAction from './call-to-action';
 import mediaFactory from './media'
 import { Builder } from "src/library/builder";
 
@@ -7,9 +8,9 @@ export default new Builder()
     name: 'gallery',
     of: [
       {
-        type: 'object',
         name: 'slide',
-        fields: [mediaFactory, {name: 'caption', type: 'string'}],
+        type: 'object',
+        fields: [mediaFactory,  {name: 'caption', type: 'string'}],
       },
     ],
   })

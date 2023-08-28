@@ -36,7 +36,6 @@ export default new Builder()
   })
   .setQuery(
     (slots) => /* groq */ `
-
       *[_type == 'page'] {
         mainSection {
           pageTitle,
@@ -45,6 +44,5 @@ export default new Builder()
         ${slots("mixin")}
         ${slots("page")}
       }
-
     `
   );

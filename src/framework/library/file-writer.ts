@@ -21,9 +21,9 @@ export class FileWriter {
   checkFileExists(filePath: string) {
     try {
       accessSync(filePath, constants.F_OK);
-      return true; // File exists
+      return true; 
     } catch (err) {
-      return false; // File does not exist
+      return false; 
     }
   }
 

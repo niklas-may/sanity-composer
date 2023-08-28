@@ -1,22 +1,23 @@
 type Schema = Record<string, any>;
-type Query = (getSlots?: (name: string) => string | void) => string;
+type Query = (slots: (name: string) => string | void) => string;
 
 export class Builder {
-  schema: Schema;
-  mixinTemp: Builder;
-  mixinQuery: string;
-  query: Query;
+  schema: Schema | undefined;
+  mixinTemp: Builder | undefined;
+  mixinQuery: string | undefined = "";
+  groupTemp: string | undefined;
+  query: Query = () => "";
 
   constructor() {
     return this;
   }
 
   get schemaType() {
-    return this.schema.type;
+    return this.schema?.type;
   }
 
   get name() {
-    return this.schema.name;
+    return this.schema?.name;
   }
 
   setSchema(schema: Schema) {
@@ -24,6 +25,9 @@ export class Builder {
 
     if (this.mixinTemp) {
       this.mixin(this.mixinTemp);
+    }
+    if (this.groupTemp) {
+      this.schema.group = this.groupTemp;
     }
     return this;
   }
@@ -34,7 +38,11 @@ export class Builder {
   }
 
   setGroup(group: string) {
-    this.schema.group = group;
+    if (this.schema) {
+      this.schema.group = group;
+    } else {
+      this.groupTemp = group;
+    }
     return this;
   }
 
@@ -45,29 +53,29 @@ export class Builder {
     }
 
     if (this.schema.type === "document") {
-      const fields = [...thatSchema.schema.fields, ...this.schema.fields];
+      const fields = [...thatSchema.schema?.fields, ...this.schema.fields];
       const schema = { ...thatSchema.schema, ...this.schema, fields };
 
       this.schema = schema;
       this.mixinQuery = thatSchema.getQuery();
       delete this.mixinTemp;
     } else {
-      console.warn("implement merg");
+      console.warn(`implement merg for ${this.schema.type}`);
     }
 
     return this;
   }
 
-  #walk(maybeSchema: Schema, onBuilder: (args: any) => any) {
+  #walk(maybeSchema: Schema, onBuilder: (args: { key: string; builder: Builder; parent: string }) => any) {
     if (!maybeSchema) return;
-    const res = {};
+    const res: Record<string, any> = {};
     const parent = maybeSchema.name;
 
     for (const [key, val] of Object.entries(maybeSchema)) {
       if (val instanceof Builder) {
         res[key] = onBuilder({ builder: val, key, parent });
       } else if (key === "fields" || key === "of") {
-        res[key] = val.map((item) => {
+        res[key] = val.map((item: Schema | Builder) => {
           if (item instanceof Builder) {
             return onBuilder({ key, builder: item, parent });
           }
@@ -80,20 +88,26 @@ export class Builder {
     return res;
   }
 
-  getSchema() {
+  getSchema(): Schema | undefined {
+    if (!this.schema) {
+      console.warn("no schema");
+      return;
+    }
     return this.#walk(this.schema, ({ builder }) => {
       return builder.getSchema();
     });
   }
 
   getQuery() {
-    const slotContent = { mixin: this.mixinQuery };
-    this.#walk(this.schema, ({ builder, parent }) => {
-      slotContent[parent] = builder.getQuery();
-    });
+    if (!this.schema) {
+      console.warn("no schema");
+      return;
+    }
+
+    const slotContent: Record<string, Array<string | undefined>> = { mixin: [this.mixinQuery] };
 
     const slots = (name: string) => {
-      const res = slotContent[name];
+      let res = (slotContent[name] ?? []).filter(Boolean).join(",");
 
       if (!res) {
         console.warn(`No content for slot "${name}" of "${this.name}" builder`);
@@ -101,6 +115,13 @@ export class Builder {
 
       return res ? `${res},` : "";
     };
+
+    this.#walk(this.schema, ({ builder, parent }) => {
+      if (!Array.isArray(slotContent[parent])) {
+        slotContent[parent] = [];
+      }
+      slotContent[parent].push(builder.getQuery());
+    });
 
     return this.query(slots);
   }
