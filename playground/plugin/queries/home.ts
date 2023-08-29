@@ -12,7 +12,6 @@ export default /* groq */`
     caption,
     _key,
     media {
-      type,
       type == "image" => {
         "image": image.asset-> {
           url,

@@ -40,6 +40,9 @@ export class FileNode {
       }
 
       this.#programData = require(this.filePath);
+
+      //TODO: Reload Logic broken
+      // this.dirty = false;
     }
     return this.#programData;
   }
@@ -49,8 +52,8 @@ export class FileNode {
   }
 
   walkUp(callback: (parent: FileNode) => void, visitedBefore?: Array<string>) {
-    const visited = visitedBefore ? visitedBefore : [...this.parents.values()];
-    
+    const visited = visitedBefore ? [...visitedBefore, ...this.parents.values()] : [...this.parents.values()];
+
     this.parents.forEach((p) => {
       if (!visitedBefore?.includes(p)) {
         callback(this.#files.get(p)!);

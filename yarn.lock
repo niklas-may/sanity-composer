@@ -3,9 +3,9 @@
 
 
 "@babel/parser@^7.21.8":
-  version "7.22.10"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.10.tgz#e37634f9a12a1716136c44624ef54283cabd3f55"
-  integrity sha512-lNbdGsQb9ekfsnjFGhEiF4hfFqGgfOP3H3d27re3n+CGhNuTSUEQdfWk556sTLNTloczcdM5TYF2LhzmDQKyvQ==
+  version "7.22.13"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.22.13.tgz#23fb17892b2be7afef94f573031c2f4b42839a2b"
+  integrity sha512-3l6+4YOvc9wx7VlCSw4yQfcBo01ECA8TicQfbnCPuCEpRQrf+gTUyGdxNw+pyTUyywp6JRD1w0YQs9TpBXYlkw==
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
@@ -172,17 +172,17 @@
     fastq "^1.6.0"
 
 "@rollup/plugin-typescript@^11.1.2":
-  version "11.1.2"
-  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-11.1.2.tgz#09eb5690a650bb0334bf84125bce9abd296442e4"
-  integrity sha512-0ghSOCMcA7fl1JM+0gYRf+Q/HWyg+zg7/gDSc+fRLmlJWcW5K1I+CLRzaRhXf4Y3DRyPnnDo4M2ktw+a6JcDEg==
+  version "11.1.3"
+  resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-11.1.3.tgz#8172858a1e5f4c181aebc61f8920002fd5e04b91"
+  integrity sha512-8o6cNgN44kQBcpsUJTbTXMTtb87oR1O0zgP3Dxm71hrNgparap3VujgofEilTYJo+ivf2ke6uy3/E5QEaiRlDA==
   dependencies:
     "@rollup/pluginutils" "^5.0.1"
     resolve "^1.22.1"
 
 "@rollup/pluginutils@^5.0.1":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.0.3.tgz#183126d69aeb1cfa23401d5a71cb4b8c16c4a4e0"
-  integrity sha512-hfllNN4a80rwNQ9QCxhxuHCGHMAvabXqxNdaChUSSadMre7t4iEUI6fFAhBOn/eIYTgYVhBv7vCLsAJ4u3lf3g==
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-5.0.4.tgz#74f808f9053d33bafec0cc98e7b835c9667d32ba"
+  integrity sha512-0KJnIoRI8A+a1dqOYLxH8vBf8bphDmty5QvIm2hqm7oFCFYKCAZWWd2hXgMibaPsNDhI0AtpYfQZJG47pt/k4g==
   dependencies:
     "@types/estree" "^1.0.0"
     estree-walker "^2.0.2"
@@ -649,10 +649,20 @@ graceful-fs@^4.2.4:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.11.tgz#4183e4e8bf08bb6e05bbb2f7d2e0c8f712ca40e3"
   integrity sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==
 
-groqfmt-nodejs@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/groqfmt-nodejs/-/groqfmt-nodejs-0.0.2.tgz#6071ec59c321c981a4a531ab2841f3aa03622ddc"
-  integrity sha512-RSSr0TkKjekNXxmlMkF5sys6bFlVMj1XKup+/kgBOrl7+5MxyrMRKDuWCnbCT6ktbRR8idqmIneEqZJPPU7A2w==
+groq-js@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-0.2.0.tgz#abd4870014a1ccdf0936d5d75a78063aff9197c0"
+  integrity sha512-qJeuEgziddryH1ClsJvMoZM9aXNQbBViNZZrJwhHKr2wU8HGGM7uNWNVFglWXMX60MMaa2SClX3UohP76Ut68g==
+
+groq-js@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/groq-js/-/groq-js-1.2.0.tgz#ee78608fb117d0fb203e940742fb6bb7f1aa8936"
+  integrity sha512-XW4PXKqf4LMsRGGz2MmBRcxDg8NJD0qTJxvd7YOdb6/IH1RQcqL/QK2o76Uxd0A3CiwMlJLUoPrL9KGUDWT39A==
+
+groqfmt-nodejs@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/groqfmt-nodejs/-/groqfmt-nodejs-0.0.4.tgz#3032f767517ace23ccee7b54528cc3b24c195505"
+  integrity sha512-XVUAktL7eDvame4y0gdEAVTuV5+SZtrcWicPlx2zi63Jkzi/mXLkr/aJBl2lPaAc4PEg00yOg0+typhGXA0fJQ==
 
 has-flag@^4.0.0:
   version "4.0.0"
@@ -890,10 +900,17 @@ precinct@^11.0.5:
     module-definition "^5.0.1"
     node-source-walk "^6.0.2"
 
+prettier-plugin-groq@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-groq/-/prettier-plugin-groq-0.2.5.tgz#7bfde0880fdbab476341e7c327fa1586ef07c9c3"
+  integrity sha512-oH2LC7Hi0RTSSs1g1kmzchV1MEKz9cSrSHL4/DWCli+vq1MV3m/EmFG4BWl+QTVcjnp3R357jbb8eX1ovtd/Bg==
+  dependencies:
+    groq-js "^0.2.0"
+
 prettier@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.0.2.tgz#78fcecd6d870551aa5547437cdae39d4701dca5b"
-  integrity sha512-o2YR9qtniXvwEZlOKbveKfDQVyqxbEIWn48Z8m3ZJjBjcCmUy3xZGIv+7AkaeuaTr6yPXJjwv07ZWlsWbEy1rQ==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.0.3.tgz#432a51f7ba422d1469096c0fdc28e235db8f9643"
+  integrity sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==
 
 queue-microtask@^1.2.2:
   version "1.2.3"
@@ -1092,9 +1109,9 @@ tsutils@^3.21.0:
     tslib "^1.8.1"
 
 typescript@^5.0.4, typescript@^5.1.6:
-  version "5.1.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
-  integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
+  integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

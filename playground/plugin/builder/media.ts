@@ -3,12 +3,12 @@ import { Builder } from "src/library/builder";
 
 export default new Builder()
   .setSchema({
-    name: 'media',
     type: 'object',
+    name: 'media',
     fields: [
       {
-        type: 'string',
         title: 'Type',
+        type: 'string',
         name: 'type',
         options: {
           list: ['image', 'video'],
@@ -70,7 +70,6 @@ export default new Builder()
   .setQuery(
     () => /* groq */ ` 
     media {
-      type,
       type == 'image' => {
         'image': image.asset->{
         url,
@@ -87,7 +86,7 @@ export default new Builder()
           thumbTime
       
         },
-        'mood': mood.asset->{
+        'mood': mood.asset -> {
         'playbackId': playbackId,
         'ratio': data.aspect_ratio
         }

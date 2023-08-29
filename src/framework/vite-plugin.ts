@@ -4,7 +4,6 @@ import { SanityComposer } from "./core-framework";
 export interface Options {
   builderIn: string;
   queryOut: string;
-  schmeaOut: string;
 }
 
 export default function VitePluginSanityDatacomposer(options: Options): Plugin {

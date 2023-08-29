@@ -1,12 +1,14 @@
 import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "node:url";
 import plugin from "./src/framework/vite-plugin";
+import { BarrelExporter } from "./src/framework/barrel-exporter";
 
 export default defineConfig({
   plugins: [
     plugin({
       builderIn: "playground/plugin/builder/",
       queryOut: "playground/plugin/queries/",
+      listener: [(ctx) => new BarrelExporter(ctx)],
     }),
   ],
   server: {

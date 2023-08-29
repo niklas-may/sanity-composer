@@ -3,8 +3,8 @@ import galleryFactory from "./gallery";
 
 export default new Builder()
   .setSchema({
-    name: "home",
     type: "document",
+    name: "home",
     fields: [galleryFactory],
   })
   .setQuery(

@@ -1,14 +1,12 @@
 import path from "path";
 import { unlinkSync } from "fs";
-import { FileNode } from "./library/file-container";
-import { EventHandler, EventHandlerDependencies, Logger } from "./library";
-import { SanityComposerFrameworkEvents } from "./core-framework";
+import { FileNode, EventHandler, EventHandlerContext, Logger } from "./library";
 
-export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
+export class QueryWriter extends EventHandler {
   logger: Logger;
 
-  constructor(dI: EventHandlerDependencies<SanityComposerFrameworkEvents>) {
-    super(dI);
+  constructor(ctx: EventHandlerContext) {
+    super(ctx);
     this.logger = new Logger("Query Writer");
 
     this.eventBus.on("change", async (filePath) => await this.onChange(filePath));
@@ -28,7 +26,7 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
     if (!query) return;
     const code = `export default /* groq */\`\n${query}\``;
     this.fileWriter.writeTypeScript(filePath, code);
-    this.logger.log(`Exported query Grr ${path.basename(filePath)}`);
+    this.logger.log(`Exported query ${path.basename(filePath)}`);
   }
 
   async onChange(filePath: string) {
@@ -42,7 +40,7 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
       return;
     } else {
       file?.walkUp(async (pFile) => {
-        if (pFile.type === "document" ) {
+        if (pFile.type === "document") {
           const query = await this.getPrettyQuery(pFile);
           this.writeQuery(this.getQueryFilePath(pFile), query);
         }
@@ -65,11 +63,9 @@ export class QueryWriter extends EventHandler<SanityComposerFrameworkEvents> {
           const isEqual = query.trim().replace(/\s/g, "") === queryOnDisk.trim().replace(/\s/g, "");
 
           if (!isEqual) {
-            this.logger.log(`On Ready: Query of ${file.basename} changed. Writing updated version to disk.`);
             this.writeQuery(queryFilePath, query);
           }
         } else {
-          this.logger.log(`On Ready: Writing query for ${file.basename}.`);
           this.writeQuery(queryFilePath, query);
         }
       }

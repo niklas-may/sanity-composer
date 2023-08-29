@@ -2,7 +2,7 @@ import path from "path";
 import { readdirSync, statSync } from "fs";
 import { register } from "ts-node";
 import chokidar from "chokidar";
-import { FileWriter, FileContainer, Logger, EventBus, EventHandlerDependencies, EventHandler } from "./library";
+import { FileWriter, FileContainer, Logger, EventBus, EventHandlerContext, EventHandler,  } from "./library";
 import { QueryWriter } from "./query-writer";
 
 export interface FrameworkOptions {
@@ -18,13 +18,13 @@ export interface SanityComposerFrameworkEvents {
   ready: [];
 }
 
-export type ListenerFactory = (ctx: EventHandlerDependencies<SanityComposerFrameworkEvents>) => any;
+export type ListenerFactory = (ctx: EventHandlerContext) => any;
 
 export class SanityComposer {
   options: FrameworkOptions;
   watcher: chokidar.FSWatcher;
   files: FileContainer;
-  listener: Array<EventHandler<SanityComposerFrameworkEvents>> = [];
+  listener: Array<EventHandler> = [];
   writer = new FileWriter();
   tsService: ReturnType<typeof register>;
   logger = new Logger();
@@ -102,11 +102,11 @@ export class SanityComposer {
   }
 
   #setupListener(handler?: Array<ListenerFactory>) {
-    /* Allway run these first */
+    /* Allways run these first */
     this.eventBus.on("add", (filePath) => this.files.add(filePath));
     this.eventBus.on("change", (filePath) => this.files.get(filePath)?.setDirty());
 
-    /* Allway run these in the middle */
+    /* Allways run these in the middle */
     if (handler) {
       handler.forEach((handler) =>
         this.listener.push(

@@ -25,7 +25,7 @@ export default new Builder()
     () => /* groq */ `
     callToActions[] {
         url,
-        title
+        title,
     }
 `
   );

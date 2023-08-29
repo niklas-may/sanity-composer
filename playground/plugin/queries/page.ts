@@ -10,7 +10,6 @@ export default /* groq */`
       caption,
       _key,
       media {
-        type,
         type == "image" => {
           "image": image.asset-> {
             url,
@@ -38,8 +37,8 @@ export default /* groq */`
       }
     }
   },
-  "seoTitle": coalesce(seoTitle[], seoTitle.en),
-  "seoDescription": coalesce(seoDescription[], seoDescription.en),
+  "seoTitle": coalesce(seoTitle[$lang], seoTitle.en),
+  "seoDescription": coalesce(seoDescription[$lang], seoDescription.en),
   seoKeywords,
   callToActions[] {
     url,

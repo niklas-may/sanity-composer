@@ -1,20 +1,23 @@
-import { EventBus, EventShape } from './event-bus';
-import { FrameworkOptions } from "../core-framework";
-import { FileContainer } from "./file-container";
-import { FileWriter } from "./file-writer";
+import { FrameworkOptions, SanityComposerFrameworkEvents } from "../core-framework";
+import { FileContainer, FileWriter, EventBus } from ".";
 
-export type EventHandlerDependencies<Events extends EventShape> = { writer: FileWriter; files: FileContainer; options: FrameworkOptions; eventBus: EventBus<Events> };
+export type EventHandlerContext = {
+  writer: FileWriter;
+  files: FileContainer;
+  options: FrameworkOptions;
+  eventBus: EventBus<SanityComposerFrameworkEvents>;
+};
 
-export class EventHandler<Events extends EventShape> {
+export class EventHandler {
   fileWriter: FileWriter;
   files: FileContainer;
   options: FrameworkOptions;
-  eventBus: EventBus<Events>
-  
-  constructor(deps: EventHandlerDependencies<Events>) {
+  eventBus: EventBus<SanityComposerFrameworkEvents>;
+
+  constructor(deps: EventHandlerContext) {
     this.fileWriter = deps.writer;
     this.files = deps.files;
     this.options = deps.options;
-    this.eventBus = deps.eventBus
+    this.eventBus = deps.eventBus;
   }
 }
