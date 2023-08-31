@@ -88,13 +88,13 @@ export class FileWriter {
 
       this.logger.error("Groq Syntx Errror", msg, queryHighlighted);
 
-      return ''
+      return "";
     }
   }
 
   async writeTypeScript(filePath: string, code: string) {
     this.ensureDirectoriesExist(filePath);
-    const content = [this.header, code].join("\n");
+    const content = [this.header, await this.prettifyTypeScript(code)].join("\n");
     return await promises.writeFile(filePath, content);
   }
 }

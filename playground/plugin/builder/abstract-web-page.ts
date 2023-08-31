@@ -11,6 +11,10 @@ export default new Builder()
     fields: [
       {
         type: "string",
+        name: "pageTitle",
+      },
+      {
+        type: "string",
         title: "Title (Open Graph)",
         name: "seoTitle",
         group: seoGroup.name,
@@ -55,6 +59,7 @@ export default new Builder()
   })
   .setQuery(
     () => /* groq */ `
+      'pageTitle': coalesce(pageTitle[$lang], pageTitle.en),
       'seoTitle': coalesce(seoTitle[$lang], seoTitle.en),
       'seoDescription': coalesce(seoDescription[$lang], seoDescription.en),
        seoKeywords

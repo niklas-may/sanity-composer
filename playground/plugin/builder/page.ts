@@ -14,10 +14,6 @@ export default new Builder()
         name: "mainSection",
         type: "object",
         fields: [
-          {
-            name: "pageTitle",
-            type: "string",
-          },
           galleryFactory,
         ],
       },
@@ -38,7 +34,6 @@ export default new Builder()
     (slots) => /* groq */ `
       *[_type == 'page'] {
         mainSection {
-          pageTitle,
           ${slots("mainSection")}
         },
         ${slots("mixin")}

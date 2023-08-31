@@ -24,6 +24,7 @@ export default new Builder()
   .setQuery(
     () => /* groq */ `
     callToActions[] {
+      _key,
         url,
         title,
     }

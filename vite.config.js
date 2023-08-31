@@ -8,6 +8,7 @@ export default defineConfig({
     plugin({
       builderIn: "playground/plugin/builder/",
       queryOut: "playground/plugin/queries/",
+      schemaOut: "playground/plugin/schema/",
       listener: [(ctx) => new BarrelExporter(ctx)],
     }),
   ],

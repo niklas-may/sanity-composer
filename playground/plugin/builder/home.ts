@@ -9,12 +9,8 @@ export default new Builder()
   })
   .setQuery(
     (slots) => /* groq */ `
-
       *[_type == 'home'] {
-        _type,
-        mainSection {
-          pageTitle,
-        },
+        "slug": slug.current,
         ${slots("home")}
       }
 

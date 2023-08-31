@@ -70,6 +70,7 @@ export default new Builder()
   .setQuery(
     () => /* groq */ ` 
     media {
+      _type,
       type == 'image' => {
         'image': image.asset->{
         url,

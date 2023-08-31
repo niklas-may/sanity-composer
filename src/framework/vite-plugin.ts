@@ -1,12 +1,7 @@
 import { type Plugin } from "vite";
-import { SanityComposer } from "./core-framework";
+import { SanityComposer, FrameworkOptions } from "./core-framework";
 
-export interface Options {
-  builderIn: string;
-  queryOut: string;
-}
-
-export default function VitePluginSanityDatacomposer(options: Options): Plugin {
+export default function VitePluginSanityDatacomposer(options: FrameworkOptions): Plugin {
   return {
     apply: "serve",
     name: "sanity-composer",

@@ -8,6 +8,7 @@ import { QueryWriter } from "./query-writer";
 export interface FrameworkOptions {
   builderIn: string;
   queryOut: string;
+  schemaOut: string;
   listener?: Array<ListenerFactory>;
 }
 
@@ -34,6 +35,7 @@ export class SanityComposer {
     this.options = {
       builderIn: this.#normalizePath(userOptions.builderIn),
       queryOut: this.#normalizePath(userOptions.queryOut),
+      schemaOut: this.#normalizePath(userOptions.schemaOut),
     };
 
     this.files = new FileContainer(this.options.builderIn);
