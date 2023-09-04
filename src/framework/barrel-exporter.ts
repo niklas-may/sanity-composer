@@ -13,18 +13,7 @@ export class BarrelExporter extends EventHandler {
 
   constructor(ctx: EventHandlerContext) {
     super(ctx);
-
-    this.groups.push({
-      type: "globalObject",
-      imports: new Set(),
-      file: path.resolve(this.options.schemaOut, "objects.ts"),
-    });
-
-    this.groups.push({
-      type: "document",
-      imports: new Set(),
-      file: path.resolve(this.options.schemaOut, "documents.ts"),
-    });
+ 
 
     this.eventBus.on("ready", this.onReady.bind(this));
     this.eventBus.on("unlink", this.onUnlink.bind(this));
@@ -65,7 +54,7 @@ export class BarrelExporter extends EventHandler {
 
   onUnlink(filePath: string) {
     const deleted = this.groups.map((g) => g.imports.delete(filePath) && g);
-    if (deleted.some(Boolean)) deleted.forEach((g) => this.writeExports(g));
+    if (deleted.some(Boolean)) deleted.filter(Boolean).forEach((g) => this.writeExports(g));
   }
 
   writeExports(group: BarrelGroup) {
@@ -84,7 +73,7 @@ export class BarrelExporter extends EventHandler {
     `;
 
     this.fileWriter.writeTypeScript(group.file, code);
-    this.logger.log("Updated schemaExprts for: ", group.file);
+    this.logger.log("Updated Schema Exprts for:", path.basename(group.file));
   }
 
   processBarrelGroup(file: FileNode, group: BarrelGroup) {

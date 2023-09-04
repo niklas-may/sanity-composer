@@ -463,6 +463,11 @@ dir-glob@^3.0.1:
   dependencies:
     path-type "^4.0.0"
 
+dot-path-value@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/dot-path-value/-/dot-path-value-0.0.10.tgz#538239fe60597f0fd753b0a8e31e6e3459baddf2"
+  integrity sha512-MrVpDoFwk1xjeM0sGRuei7N3LQOylJ9iamgfxAQwPY0hPnDHL981hM/KpoQwFHMckgjZvJA0MyH7VN//ernFFA==
+
 enhanced-resolve@^5.14.1:
   version "5.15.0"
   resolved "https://registry.yarnpkg.com/enhanced-resolve/-/enhanced-resolve-5.15.0.tgz#1af946c7d93603eb88e9896cee4904dc012e9c35"

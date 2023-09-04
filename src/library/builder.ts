@@ -1,11 +1,33 @@
 type Schema = Record<string, any>;
-type Query = (slots: (name: string) => string | void) => string;
+type Query = (slots: (name: string) => string | void, name: string) => string;
+
+const SANITY_INTRINSIC_FIELDS = [
+  "array",
+  "block",
+  "boolean",
+  "date",
+  "datetime",
+  "document",
+  "file",
+  "geopoint",
+  "image",
+  "number",
+  "object",
+  "reference",
+  "crossDatasetReference",
+  "slug",
+  "string",
+  "text",
+  "url",
+  "email",
+];
 
 export class Builder {
   schema: Schema | undefined;
   mixinTemp: Builder | undefined;
   mixinQuery: string | undefined = "";
   groupTemp: string | undefined;
+  nameTemp: string | undefined;
   query: Query = () => "";
 
   constructor() {
@@ -29,6 +51,11 @@ export class Builder {
     if (this.groupTemp) {
       this.schema.group = this.groupTemp;
     }
+    return this;
+  }
+
+  setName(name: string) {
+    this.nameTemp = name;
     return this;
   }
 
@@ -93,9 +120,28 @@ export class Builder {
       console.warn("no schema");
       return;
     }
-    return this.#walk(this.schema, ({ builder }) => {
-      return builder.getSchema();
+
+    const res = this.#walk(this.schema, ({ builder }) => {
+      if (builder?.schema?.type === "globalObject") {
+        const type = builder.schema.name;
+        const temp = builder.getSchema();
+        return {
+          name: temp?.name,
+          type,
+        };
+      } else {
+        return builder.getSchema();
+      }
     });
+
+    if (this.nameTemp) {
+      res.name = this.nameTemp;
+    }
+
+    if (this.schema.type === "globalObject") {
+      res.type = "object";
+    }
+    return res;
   }
 
   getQuery() {
@@ -123,6 +169,37 @@ export class Builder {
       slotContent[parent].push(builder.getQuery());
     });
 
-    return this.query(slots);
+    return this.query(slots, this.nameTemp ?? this.schema?.name);
   }
 }
+
+
+type CompiledSchema = Record<string, any>
+type CompiledQuery = String
+
+type QueryV2 = {
+  getChildQueries: () => string
+  getChildQuery: (path: string) => string,
+  getChildQueriesAt: (path: string) => string
+}
+
+declare function createField(args: {
+  schema: Schema;
+  query: Query;
+  onBeforeCompile: (schema: Schema) => Schema;
+}): [() => CompiledSchema, () => CompiledQuery]
+
+export const createMedia = (args: { name: string }) =>
+  createField({
+    schema: {},
+    onBeforeCompile: (schema) => {
+      schema.name = args.name;
+      return schema
+    },
+    query: (childQuerys) => /* groq */ `
+  *[_type == 'page'] {
+    ...,
+    ${getFields()}
+  }
+  `,
+  });

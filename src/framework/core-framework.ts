@@ -2,8 +2,9 @@ import path from "path";
 import { readdirSync, statSync } from "fs";
 import { register } from "ts-node";
 import chokidar from "chokidar";
-import { FileWriter, FileContainer, Logger, EventBus, EventHandlerContext, EventHandler,  } from "./library";
+import { FileWriter, FileContainer, Logger, EventBus, EventHandlerContext, EventHandler } from "./library";
 import { QueryWriter } from "./query-writer";
+import { BarrelExporter } from "./barrel-exporter";
 
 export interface FrameworkOptions {
   builderIn: string;
@@ -41,7 +42,7 @@ export class SanityComposer {
     this.files = new FileContainer(this.options.builderIn);
     this.#loadAllFiles();
 
-    const listenerTemp: Array<ListenerFactory> = [(ctx) => new QueryWriter(ctx)];
+    const listenerTemp: Array<ListenerFactory> = [(ctx) => new QueryWriter(ctx), (ctx) => new BarrelExporter(ctx)];
     if (userOptions.listener) userOptions.listener.forEach((l) => listenerTemp.push(l));
 
     this.#setupListener(listenerTemp);

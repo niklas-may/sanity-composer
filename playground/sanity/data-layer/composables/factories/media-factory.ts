@@ -1,4 +1,4 @@
-import { Builder } from "src/library/builder";
+import {Builder} from './../../../../../src/library/builder'
 // import {Image} from '../../components/Image'
 
 export default new Builder()
@@ -93,5 +93,5 @@ export default new Builder()
         }
       }
     }
-    `
+    `,
   )

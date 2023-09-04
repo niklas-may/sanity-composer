@@ -4,7 +4,10 @@
 
 export default /* groq */ `
 *[_type == "home"] {
-  "slug": slug.current,
+  "pageTitle": coalesce(pageTitle[$lang], pageTitle.en),
+  "seoTitle": coalesce(seoTitle[$lang], seoTitle.en),
+  "seoDescription": coalesce(seoDescription[$lang], seoDescription.en),
+  seoKeywords,
   gallery[] {
     caption,
     _key,
@@ -31,11 +34,8 @@ export default /* groq */ `
         }
       }
     },
-    callToActions[] {
-      _key,
-      url,
-      title
-    }
-  }
+    "myTitle": coalesce(myTitle[$lang], myTitle.en)
+  },
+  ...
 }
 `;

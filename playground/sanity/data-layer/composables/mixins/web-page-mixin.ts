@@ -1,12 +1,13 @@
-import { Builder } from "src/library/builder";
+import {Builder} from './../../../../../src/library/builder'
 
 const contentGroup = { name: "content", title: "Content", default: true };
 const seoGroup = { name: "seo", title: "SEO" };
 const groups = [contentGroup, seoGroup];
 
+
 export default new Builder()
   .setSchema({
-    name: "page",
+    name: "webPage",
     groups,
     fields: [
       {
@@ -16,13 +17,13 @@ export default new Builder()
       {
         type: "string",
         title: "Title (Open Graph)",
-        name: "seoTitle",
         group: seoGroup.name,
+        name: "seoTitle",
         description: "Used for Open Graph previews implemented  by facebook, twitter, google etc.",
       },
       {
-        name: "seoDescription",
         title: "Description (Open Graph)",
+        name: "seoDescription",
         type: "string",
         group: seoGroup.name,
       },
@@ -58,7 +59,7 @@ export default new Builder()
     },
   })
   .setQuery(
-    () => /* groq */ `
+    (slots) => /* groq */ `
       'pageTitle': coalesce(pageTitle[$lang], pageTitle.en),
       'seoTitle': coalesce(seoTitle[$lang], seoTitle.en),
       'seoDescription': coalesce(seoDescription[$lang], seoDescription.en),

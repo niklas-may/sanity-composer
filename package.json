@@ -3,7 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev:framework": "vite",
+    "dev:sanity": "cd ./playground/sanity && sanity dev",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
-    "chokidar": "^3.5.3"
+    "chokidar": "^3.5.3",
+    "dot-path-value": "^0.0.10"
   }
 }
