@@ -1,5 +1,6 @@
 import path from "path";
 import { EventHandler, EventHandlerContext, FileNode, Logger } from "./library";
+import util from "util";
 
 type BarrelGroup = {
   type: "globalObject" | "document";
@@ -13,7 +14,18 @@ export class BarrelExporter extends EventHandler {
 
   constructor(ctx: EventHandlerContext) {
     super(ctx);
- 
+
+    this.groups.push({
+      file: path.resolve(this.options.schemaOut, "objects.ts"),
+      type: "globalObject",
+      imports: new Set(),
+    });
+
+    this.groups.push({
+      file: path.resolve(this.options.schemaOut, "documents.ts"),
+      type: "document",
+      imports: new Set(),
+    });
 
     this.eventBus.on("ready", this.onReady.bind(this));
     this.eventBus.on("unlink", this.onUnlink.bind(this));
@@ -58,6 +70,7 @@ export class BarrelExporter extends EventHandler {
   }
 
   writeExports(group: BarrelGroup) {
+   
     const filesArray = Array.from(group.imports);
     const imports = filesArray
       .map(

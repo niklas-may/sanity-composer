@@ -7,9 +7,9 @@ export default new Builder()
     name: 'media',
     fields: [
       {
-        title: 'Type',
         type: 'string',
         name: 'type',
+        title: 'Type',
         options: {
           list: ['image', 'video'],
           layout: 'radio',

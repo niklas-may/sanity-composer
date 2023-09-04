@@ -8,8 +8,8 @@ export default new Builder()
     name: 'gallery',
     of: [
       {
-        name: 'slide',
         type: 'object',
+        name: 'slide',
         fields: [
           mediaFactory, 
           localeString.setName('myTitle'),
